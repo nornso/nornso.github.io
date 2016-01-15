@@ -1,0 +1,150 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="Keywords" content="blog"/>
+    <meta name="Description" content="blog"/>
+    <title>Simple</title>
+    <link rel="shortcut icon" href="/static/favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+</head>
+<body>
+<div class="main">
+    <div class="header">
+    	<ul id="pages">
+            <li><a href="/">home</a></li>
+            <li><a href="/#/tags">tags</a></li>
+            <li><a href="/#/archive">archive</a></li>
+    	</ul>
+    </div>
+	<div class="wrap-header">
+	<h1>
+    <a href="/" id="title"></a>
+	</h1>
+	</div>
+<div id="md" style="display: none;">
+<!-- markdown -->
+#吴苏的求职简历
+<div align = center>Adnroid开发工程师</div>
+
+
+## 联系方式
+
+- 手机：18851557316
+- Email：wusu112358@gmail.com
+- QQ：760860596
+
+---
+
+## 个人信息
+
+ - 吴苏/男/1991
+ - 本科/苏州科技学院应用物理系 
+ - Android经验：1年
+ - Github： https://github.com/nornso
+
+ - 期望职位：Android开发工程师
+ - 期望薪资：8000左右
+ - 期望城市：苏州/南京
+
+---
+
+## 技能清单
+
+-   熟悉Java，了解html/css
+-   熟悉Android常用框架volley/okhttp/EventBus/ButterKnife/Glide等
+-   熟悉JSON、XML数据格式的序列化和反序列化
+-   熟悉SQLite数据库及相关语法
+-   能通过git等版本控制系统进行多人协作开发
+-   会使用android自带测试框架进行数据业务逻辑的单元测试
+-   有良好的自学能力和独立解决问题的能力
+
+---
+
+## 项目经验
+
+ - [SunShine](https://github.com/nornso/Sunshine-Version-2) : 一款天气预报应用，Udacity上的谷歌官方课程[Developing Android Apps](https://www.udacity.com/course/progress#!/c-ud853)，包含了完整的APP开发流程，以及一些谷歌建议的规范。在[OpenWeatherMap](http://openweathermap.org/API)上获取天气信息的JSON数据流，解析保存到本地数据库。用ListView展示天气信息，并使用Fragment来做平板和手机的界面适配。
+
+ - [Willpower](https://github.com/nornso/willpower-android) : 个人独立开发的一款时间管理应用，使用了Android Design Support Library，并自定义了一些View和控件。点击[Willpower](https://github.com/nornso/willpower-android)可以进入github项目主页，主页上展示了一些已经完成的demo，项目还在开发中。
+
+---
+
+## 致谢
+感谢您花时间阅读我的简历，希望获得与您面试的机会。
+<!-- markdown end -->
+</div>
+<div class="entry" id="main">
+<!-- content -->
+
+<!-- content end -->
+</div>
+<br>
+<br>
+    <div id="disqus_thread"></div>
+	<div class="footer">
+		<p>© Copyright 2014 by isnowfy, Designed by isnowfy</p>
+	</div>
+</div>
+<script src="main.js"></script>
+<script id="content" type="text/mustache">
+    <h1>{{title}}</h1>
+    <div class="tag">
+    {{date}}
+    {{#tags}}
+    <a href="/#/tag/{{name}}">#{{name}}</a>
+    {{/tags}}
+    </div>
+</script>
+<script id="pagesTemplate" type="text/mustache">
+    {{#pages}}
+    <li>
+        <a href="{{path}}">{{title}}</a>
+    </li>
+    {{/pages}}
+</script>
+<script>
+$(document).ready(function() {
+    $.ajax({
+        url: "main.json",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            $("#title").html(data.name);
+            var pagesTemplate = Hogan.compile($("#pagesTemplate").html());
+            var pagesHtml = pagesTemplate.render({"pages": data.pages});
+            $("#pages").append(pagesHtml);
+            //path
+            var path = "resume.html";
+            //path end
+            var now = 0;
+            for (var i = 0; i < data.posts.length; ++i)
+                if (path == data.posts[i].path)
+                    now = i;
+            var post = data.posts[now];
+            var tmp = post.tags.split(" ");
+            var tags = [];
+            for (var i = 0; i < tmp.length; ++i)
+                if (tmp[i].length > 0)
+                    tags.push({"name": tmp[i]});
+            var contentTemplate = Hogan.compile($("#content").html());
+            var contentHtml = contentTemplate.render({"title": post.title, "tags": tags, "date": post.date});
+            $("#main").prepend(contentHtml);
+            if (data.disqus_shortname.length > 0) {
+                var disqus_shortname = data.disqus_shortname;
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            }
+        }
+    });
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ["\\(", "\\)"]], processEscapes: true}});
+</script>
+</body>
+</html>
